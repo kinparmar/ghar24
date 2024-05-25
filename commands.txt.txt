@@ -1,0 +1,148 @@
+Working example:- 
+important files are src/index.js
+resolvers.js
+schema.js
+
+all other files are auto generated.
+
+npm init -y
+
+npm install sequelize sequelize-cli mysql2
+
+node_modules/.bin/sequelize init
+
+change config/config.js
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "hello_world_db",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+
+
+node_modules/.bin/sequelize model:create --name User --attributes name:string,email:string,password:string
+
+PS E:\Work\Flutter\Projects\2024\graphql\20240524> npx sequelize-cli db:create
+
+    Sequelize CLI [Node: 20.13.1, CLI: 6.6.2, ORM: 6.37.3]
+
+     Loaded configuration file "config\config.json".
+     Using environment "development".
+     Database hello_world_db created.
+PS E:\Work\Flutter\Projects\2024\graphql\20240524> npx sequelize-cli db:migrate
+
+            Sequelize CLI [Node: 20.13.1, CLI: 6.6.2, ORM: 6.37.3]
+
+            Loaded configuration file "config\config.json".
+            Using environment "development".
+             == 20240524053854-create-user: migrating =======
+            == 20240524053854-create-user: migrated (0.046s)
+
+            == 20240524054038-create-recipe: migrating =======
+           == 20240524054038-create-recipe: migrated (0.042s)
+
+           PS E:\Work\Flutter\Projects\2024\graphql\20240524> 
+
+
+npm install apollo-server graphql bcryptjs
+
+src/index.js
+
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
+const models = require('../models');
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: { models },
+});
+
+server
+  .listen()
+  .then(({ url }) => console.log('Server is running on localhost:4000'));
+
+
+
+
+src/schema.js
+
+const { gql } = require('apollo-server');
+
+const typeDefs = gql`
+  type User {
+    id: Int!
+    name: String!
+    email: String!
+  }
+
+  type Query {
+    user(id: Int!): User
+    allUser: [User]
+  }
+
+  type Mutation {
+    createUser(name: String!, email: String!, password: String!): User!
+
+  }
+`;
+
+module.exports = typeDefs;
+
+
+
+src/resolvers.js
+const bcrypt = require('bcryptjs');
+
+const resolvers = {
+    Query: {
+        async allUser(root, args, { models })
+        {
+          return models.User.findAll()
+        },
+        async user (root, { id }, { models }) {
+          return models.User.findById(id)
+        },
+    },
+    Mutation: {
+        async createUser(root, { name, email, password }, { models }) {
+          return models.User.create({
+            name,
+            email,
+            password: await bcrypt.hash(password, 10),
+          });
+        },
+      },
+  };
+  
+  module.exports = resolvers;
+
+
+
+node src/index.js
+
+Browser:-
+http://localhost:4000/
+
+# create a new user
+
+mutation{
+  createUser(
+    name: "John Doe",
+    email: "johndoe@example.com",
+    password: "password"
+  )
+  {
+    id,
+    name,
+    email
+  }
+}
+
+query AllUser {
+  allUser {
+    id
+  }
+}
