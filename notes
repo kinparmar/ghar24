@@ -1,0 +1,48 @@
+node_modules/.bin/sequelize model:create --name Property --attributes propertyid:Integer, imageUrl:String, address:String, description:String, price:Double, bedRooms:Integer, bathRooms:Integer, sqFeet:Double, garages:Integer, time:integer, moreImagesUrl_1:String, moreImagesUrl_2:String, isFav:Boolean, longitude:Double, latitude:Double
+npx sequelize-cli db:create
+
+npx sequelize-cli db:migrate
+
+https://sequelize.org/docs/v7/models/data-types/
+
+mutation CreateProperty{
+  createProperty(propertyid: 1, imageUrl: "assets/house1.jpg", address: "Ratnaraj Society, Sargasan, Gandhinagar", description: "3BHK", price: 25000, bedRooms: 3, bathRooms: 3, sqFeet: 1600, garages: 0, time: 2, moreImagesUrl_1: "assets/house1_extra_1.jpg", moreImagesUrl_2: "assets/house1_extra_1.jpg", isFav: true, longitude: 23.193773, latitude: 72.613593) {
+    address
+    bathRooms
+    bedRooms
+    description
+    garages
+    id
+    imageUrl
+    isFav
+    latitude
+    longitude
+    moreImagesUrl_1
+    moreImagesUrl_2
+    price
+    propertyid
+    sqFeet
+    time
+  }
+}
+
+mutation CreateProperty{
+  createProperty(propertyid: 5, imageUrl: "assets/house5.jpg", address: "Krishna Society, Rayasan, Gandhinagar", description: "2BHK", price: 20000, bedRooms: 2, bathRooms:2, sqFeet: 1000, garages: 0, time: 42, moreImagesUrl_1: "assets/house5_extra_1.jpg", moreImagesUrl_2: "assets/house5_extra_2.jpg", isFav: false, longitude: 20.205773, latitude: 72.716693) {
+    address
+    bathRooms
+    bedRooms
+    description
+    garages
+    id
+    imageUrl
+    isFav
+    latitude
+    longitude
+    moreImagesUrl_1
+    moreImagesUrl_2
+    price
+    propertyid
+    sqFeet
+    time
+  }
+}
