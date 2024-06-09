@@ -146,3 +146,10 @@ query AllUser {
     id
   }
 }
+
+
+
+git checkout -b my-new-branch
+git add .
+git commit -m "New branch"
+git push -u origin my-new-branch
